@@ -8,6 +8,7 @@ class AdminCreate(BaseModel):
 class AdminResponse(BaseModel):
     name:str
     email:str
+    password:str
     
     class Config:
         from_attributes = True

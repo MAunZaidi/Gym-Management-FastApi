@@ -30,7 +30,10 @@ async def LoginAdmin(
     return await controller.LoginLogic(db, LoginBody)
 
 
-@app.get("/is_auth")
-async def is_auth(request: Request):
-    return await controller.is_auth(request)
+@app.get("/is_auth", response_model=schemas.AdminResponse)
+async def is_auth(
+    request: Request, 
+    db:AsyncSession = Depends(getdb)
+):
+    return await controller.is_auth(request, db)
     
