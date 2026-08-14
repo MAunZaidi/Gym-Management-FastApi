@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, Request
 from contextlib import asynccontextmanager
 from database import engine, Base, getdb
 import model
-import schemas, controller
+import schemas, controller, utils.helper as helper
 from sqlalchemy.ext.asyncio import AsyncSession
 
 @asynccontextmanager
@@ -11,7 +11,7 @@ async def lifespan(app: FastAPI):
         await conn.run_sync(Base.metadata.create_all)
     yield
     await engine.dispose()
-    
+
 app = FastAPI(lifespan=lifespan)
 
 @app.post("/signup", response_model=schemas.AdminResponse)
@@ -32,8 +32,7 @@ async def LoginAdmin(
 
 @app.get("/is_auth", response_model=schemas.AdminResponse)
 async def is_auth(
-    request: Request, 
+    request: Request,
     db:AsyncSession = Depends(getdb)
 ):
-    return await controller.is_auth(request, db)
-    
+    return await helper.is_auth(request, db)
