@@ -5,8 +5,8 @@ from datetime import datetime, date
 import enum
 
 class Gender(str, enum.Enum):
-    Male = "Male",
-    Female = "Female",
+    Male = "Male"
+    Female = "Female"
     Other = "Other"
     
 class Admin(Base):
@@ -29,4 +29,3 @@ class Member(Base):
     address: Mapped[str] = mapped_column(String(225))
     joined_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    

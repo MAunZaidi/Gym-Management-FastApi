@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 import jwt
-from schemas import AdminCreate,LoginCreate
+from schemas.admin_schema import AdminCreate,LoginCreate
 from model import Admin
-from fastapi import HTTPException, Request
+from fastapi import HTTPException
 from sqlalchemy import select
 from pwdlib import PasswordHash
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -52,7 +52,6 @@ async def LoginLogic(db:AsyncSession, admin_body:LoginCreate):
         raise HTTPException(status_code=401, detail="User not exists")
     if not verifypassword(admin_body.password, is_user.password):     
         raise HTTPException(status_code=401, detail="Wrong Password")
-    
     
     #---CODE TO GENERATE TOKEN-----
     expired_delta = None
