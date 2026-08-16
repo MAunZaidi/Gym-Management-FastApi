@@ -1,23 +1,23 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 import jwt
 from model import Admin
-from fastapi import HTTPException, Request
+from fastapi import HTTPException, Depends
 from sqlalchemy import select
 import os
 from dotenv import  load_dotenv
-load_dotenv()
+from fastapi.security import OAuth2PasswordBearer
 from datetime import datetime
+from database import getdb
 
+load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM  = "HS256"
 
-async def is_auth(request: Request, db:AsyncSession):
-    token = request.headers.get("authorization")
-    if not token:
-        raise HTTPException(status_code=401, detail="Not authenticated")
-    get_token_clean = token.split(" ")[-1]
+
+oauth2_scheme  = OAuth2PasswordBearer(tokenUrl="login")
+async def is_auth(token:str = Depends(oauth2_scheme) ,db:AsyncSession = Depends(getdb)):
     try:
-        data = jwt.decode(get_token_clean, SECRET_KEY, algorithms=[ALGORITHM])
+        data = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
     

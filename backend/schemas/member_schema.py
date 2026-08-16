@@ -10,3 +10,9 @@ class MemberData(BaseModel):
     dob : date
     address : str
     is_active : bool
+
+class MemberResponse(MemberData):
+    id: int
+
+    class Config:
+        from_attributes = True

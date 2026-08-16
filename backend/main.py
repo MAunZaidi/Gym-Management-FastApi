@@ -1,7 +1,7 @@
-from fastapi import FastAPI, Depends, Request
+from fastapi import FastAPI, Depends
 from contextlib import asynccontextmanager
 from database import engine, Base, getdb
-import model
+from model import Admin
 from schemas import admin_schema, member_schema
 import utils.helper as helper
 from controller import admin, member
@@ -25,25 +25,25 @@ async def LoginAdmin(LoginBody:admin_schema.LoginCreate, db:AsyncSession = Depen
     return await admin.LoginLogic(db, LoginBody)
 
 @app.get("/is_auth", response_model=admin_schema.AdminResponse)
-async def is_auth(request: Request, db:AsyncSession = Depends(getdb)):
-    return await helper.is_auth(request, db)
+async def is_auth(user: Admin = Depends(helper.is_auth)):
+    return user
 
-@app.post("/members", response_model=member_schema.MemberData)
-async def CreateMember(MemberBody: member_schema.MemberData, db:AsyncSession = Depends(getdb)):
+@app.post("/members", response_model=member_schema.MemberResponse)
+async def CreateMember(MemberBody: member_schema.MemberData, db:AsyncSession = Depends(getdb), user:Admin = Depends(helper.is_auth)):
     return await member.RegisterMember(db,MemberBody)
 
-@app.get("/members", response_model=list[member_schema.MemberData])
+@app.get("/members", response_model=list[member_schema.MemberResponse])
 async def GetMembers(db:AsyncSession = Depends(getdb)):
     return await member.GetMember(db)
 
-@app.get("/members/{memberid}", response_model=member_schema.MemberData)
+@app.get("/members/{memberid}", response_model=member_schema.MemberResponse)
 async def GetMembers(memberid:int, db:AsyncSession = Depends(getdb)):
     return await member.GetMemberByid(db, memberid)
 
-@app.put("/members/{memberid}", response_model=member_schema.MemberData)
-async def UpdateMember(memberid:int, MemberBody:member_schema.MemberData, db:AsyncSession = Depends(getdb)):
+@app.put("/members/{memberid}", response_model=member_schema.MemberResponse)
+async def UpdateMember(memberid:int, MemberBody:member_schema.MemberData, db:AsyncSession = Depends(getdb), user:Admin = Depends(helper.is_auth)):
     return await member.UpdateMember(db, memberid, MemberBody)
 
 @app.delete("/members/{memberid}")
-async def DeleteMember(memberid:int, db:AsyncSession = Depends(getdb)):
+async def DeleteMember(memberid:int, db:AsyncSession = Depends(getdb), user:Admin = Depends(helper.is_auth)):
     return await member.DeleteMember(db, memberid)

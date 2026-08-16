@@ -5,7 +5,6 @@ from model import Admin
 from fastapi import HTTPException
 from sqlalchemy import select
 from pwdlib import PasswordHash
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import os
 from dotenv import  load_dotenv
 load_dotenv()
