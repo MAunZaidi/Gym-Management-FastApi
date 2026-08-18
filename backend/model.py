@@ -16,8 +16,6 @@ class Admin(Base):
     email:Mapped[str] = mapped_column(String(50))
     password: Mapped[str] = mapped_column(String(255))
 
-
-
 class Member(Base):
     __tablename__ = "members"
     id:Mapped[int] = mapped_column(primary_key=True, index=True)
@@ -35,7 +33,7 @@ class MembershipPlan(Base):
     __tablename__ = "MembershipPlan"
     id:Mapped[int] = mapped_column(primary_key=True)
     name:Mapped[str] = mapped_column(String(100), nullable=False)
-    duration:Mapped[int] = mapped_column(Integer)
+    duration:Mapped[int] = mapped_column(String(200))
     price:Mapped[float] = mapped_column(Float)
     decription:Mapped[str] = mapped_column(String(500), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
