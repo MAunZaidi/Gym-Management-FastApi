@@ -29,8 +29,8 @@ class Member(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     
     
-class MembershipPlan(Base):
-    __tablename__ = "MembershipPlan"
+class Membership(Base):
+    __tablename__ = "Memberships"
     id:Mapped[int] = mapped_column(primary_key=True)
     name:Mapped[str] = mapped_column(String(100), nullable=False)
     duration:Mapped[int] = mapped_column(String(200))

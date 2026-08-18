@@ -1,39 +1,39 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import getdb
-from schemas.membership_plan import MembershipPlan_Data
-from controller import membership_plan
+from schemas.membership_schema import MembershipData
+from controller import membership
 
-router = APIRouter(prefix="/plan", tags=["MembershipPlan"])
+router = APIRouter(prefix="/plan", tags=["Memberships"])
 
-@router.post("", response_model=MembershipPlan_Data)
+@router.post("", response_model=MembershipData)
 async def CreateMS(
-    ms_plan:MembershipPlan_Data,
+    ms_plan:MembershipData,
     db:AsyncSession = Depends(getdb)
 ):
-    return await membership_plan.CreateMembership(db, ms_plan)
-    
-@router.get("", response_model=list[MembershipPlan_Data])
+    return await membership.CreateMembership(db, ms_plan)
+
+@router.get("", response_model=list[MembershipData])
 async def GetMS(
     db:AsyncSession = Depends(getdb)
 ):
-    return await membership_plan.GetMembership(db)
+    return await membership.GetMembership(db)
 
-@router.get("/{ms_id}", response_model=MembershipPlan_Data)
+@router.get("/{ms_id}", response_model=MembershipData)
 async def GetMSById(
     ms_id:int,
     db:AsyncSession = Depends(getdb)
 ):
-    return await membership_plan.GetMembershipByid(db, ms_id)
+    return await membership.GetMembershipByid(db, ms_id)
 
 
-@router.put("/{ms_id}", response_model=MembershipPlan_Data)
+@router.put("/{ms_id}", response_model=MembershipData)
 async def UpdateMS(
-    ms_plan:MembershipPlan_Data,
+    ms_plan:MembershipData,
     ms_id:int,
     db:AsyncSession = Depends(getdb)
 ):
-    return await membership_plan.UpdateMembership(db, ms_id, ms_plan)
+    return await membership.UpdateMembership(db, ms_id, ms_plan)
 
 
 @router.delete("/{ms_id}")
@@ -41,4 +41,4 @@ async def DeleteMS(
     ms_id:int,
     db:AsyncSession = Depends(getdb)
 ):
-    return await membership_plan.DeleteMembership(db, ms_id)
+    return await membership.DeleteMembership(db, ms_id)

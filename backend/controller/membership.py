@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from schemas.membership_plan import MembershipPlan_Data
-from model import MembershipPlan
+from schemas.membership_schema import MembershipData
+from model import Membership
 from sqlalchemy import select
 from fastapi import HTTPException
 
@@ -13,8 +13,8 @@ def error_msg(user):
         )
     )
         
-async def CreateMembership(db:AsyncSession, ms_plan:MembershipPlan_Data):
-    ms_plan_entry = MembershipPlan(
+async def CreateMembership(db:AsyncSession, ms_plan:MembershipData):
+    ms_plan_entry = Membership(
         name = ms_plan.name,
         duration = ms_plan.duration,
         price = ms_plan.price,
@@ -27,18 +27,18 @@ async def CreateMembership(db:AsyncSession, ms_plan:MembershipPlan_Data):
     return ms_plan_entry
 
 async def GetMembership(db:AsyncSession):
-    result = await db.execute(select(MembershipPlan))
+    result = await db.execute(select(Membership))
     return result.scalars().all()
 
 
 async def GetMembershipByid(db:AsyncSession, id:int):
-    result = await db.execute(select(MembershipPlan).where(MembershipPlan.id==id))
+    result = await db.execute(select(Membership).where(Membership.id==id))
     is_msplan = result.scalar_one_or_none()
     error_msg(is_msplan)
     return is_msplan
 
-async def UpdateMembership(db:AsyncSession, id:int, ms_plan:MembershipPlan_Data):
-    result = await db.execute(select(MembershipPlan).where(MembershipPlan.id==id))
+async def UpdateMembership(db:AsyncSession, id:int, ms_plan:MembershipData):
+    result = await db.execute(select(Membership).where(Membership.id==id))
     is_msplan = result.scalar_one_or_none()
     error_msg(is_msplan)
     
@@ -50,12 +50,12 @@ async def UpdateMembership(db:AsyncSession, id:int, ms_plan:MembershipPlan_Data)
     return is_msplan
 
 async def DeleteMembership(db:AsyncSession, id:int):
-    result = await db.execute(select(MembershipPlan).where(MembershipPlan.id==id))
+    result = await db.execute(select(Membership).where(Membership.id==id))
     is_msplan = result.scalar_one_or_none()
     error_msg(is_msplan)
     
     await db.delete(is_msplan)
     await db.commit()
     return{
-        "Message":"Membership Plan has been deleted Sucessfully"
+        "Message":"Membership has been deleted Sucessfully"
     }

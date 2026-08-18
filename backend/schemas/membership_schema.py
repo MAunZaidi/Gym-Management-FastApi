@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class MembershipPlan_Data(BaseModel):
+class MembershipData(BaseModel):
     name: str
     duration: str
     price: float
