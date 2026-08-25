@@ -1,15 +1,18 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import getdb
+from model import Admin
 from schemas.membership_schema import MembershipData
 from controller import membership
+import utils.helper as helper
 
 router = APIRouter(prefix="/plan", tags=["Memberships"])
 
 @router.post("", response_model=MembershipData)
 async def CreateMS(
     ms_plan:MembershipData,
-    db:AsyncSession = Depends(getdb)
+    db:AsyncSession = Depends(getdb),
+    user: Admin = Depends(helper.is_auth)
 ):
     return await membership.CreateMembership(db, ms_plan)
 
@@ -31,7 +34,8 @@ async def GetMSById(
 async def UpdateMS(
     ms_plan:MembershipData,
     ms_id:int,
-    db:AsyncSession = Depends(getdb)
+    db:AsyncSession = Depends(getdb),
+    user: Admin = Depends(helper.is_auth)
 ):
     return await membership.UpdateMembership(db, ms_id, ms_plan)
 
@@ -39,6 +43,7 @@ async def UpdateMS(
 @router.delete("/{ms_id}")
 async def DeleteMS(
     ms_id:int,
-    db:AsyncSession = Depends(getdb)
+    db:AsyncSession = Depends(getdb),
+    user: Admin = Depends(helper.is_auth)
 ):
     return await membership.DeleteMembership(db, ms_id)

@@ -1,6 +1,6 @@
 from database import Base
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String, Integer, Date, Boolean, DateTime, func, Enum, Float
+from sqlalchemy import String, Integer, Date, Boolean, DateTime, func, Enum, Float, Numeric
 from datetime import datetime, date
 import enum
 
@@ -36,4 +36,16 @@ class Membership(Base):
     duration:Mapped[int] = mapped_column(String(200))
     price:Mapped[float] = mapped_column(Float)
     decription:Mapped[str] = mapped_column(String(500), nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+
+
+class Trainer(Base):
+    __tablename__ = "Trainers"
+    id:Mapped[int] = mapped_column(primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
+    phone: Mapped[str] = mapped_column(String(20))
+    specialization: Mapped[str] = mapped_column(String(100))
+    salary: Mapped[float] = mapped_column(Numeric(10, 2))
+    joined_date: Mapped[date] = mapped_column(Date)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
