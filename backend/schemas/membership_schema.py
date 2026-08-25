@@ -7,3 +7,9 @@ class MembershipData(BaseModel):
     price: float
     decription: str
     is_active: bool
+
+class MembershipResponse(MembershipData):
+    id: int
+
+    class Config:
+        from_attributes = True

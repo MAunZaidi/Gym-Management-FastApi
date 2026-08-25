@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import getdb
 from model import Admin
-from schemas import member_schema
-from controller import member
+from schemas import member_schema, attendance_schema
+from controller import member, attendance
 import utils.helper as helper
 
 router = APIRouter(prefix="/members", tags=["Members"])
@@ -32,3 +32,8 @@ async def UpdateMember(memberid: int, MemberBody: member_schema.MemberData, db: 
 @router.delete("/{memberid}")
 async def DeleteMember(memberid: int, db: AsyncSession = Depends(getdb), user: Admin = Depends(helper.is_auth)):
     return await member.DeleteMember(db, memberid)
+
+
+@router.get("/{member_id}/attendance", response_model=list[attendance_schema.AttendanceResponse])
+async def GetMemberAttendance(member_id:int, db:AsyncSession=Depends(getdb)):
+    return await attendance.GetAttendance(db, member_id, None)
