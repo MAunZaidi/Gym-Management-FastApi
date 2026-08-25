@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from database import engine, Base
-from routes import AdminRoute, MemberRoute, MembershipRoute, TrainerRoute
+from routes import AdminRoute, MemberRoute, MembershipRoute, TrainerRoute, AttendanceRoute
 
 
 @asynccontextmanager
@@ -17,3 +17,4 @@ app.include_router(AdminRoute.router)
 app.include_router(MemberRoute.router)
 app.include_router(MembershipRoute.router)
 app.include_router(TrainerRoute.router)
+app.include_router(AttendanceRoute.router)
