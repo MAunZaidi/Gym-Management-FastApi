@@ -1,14 +1,14 @@
 from pydantic import BaseModel
 
 
-class MembershipData(BaseModel):
+class MembershipPlanData(BaseModel):
     name: str
     duration: str
     price: float
     decription: str
     is_active: bool
 
-class MembershipResponse(MembershipData):
+class MembershipPlanResponse(MembershipPlanData):
     id: int
 
     class Config:

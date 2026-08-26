@@ -30,8 +30,8 @@ class Member(Base):
     attendance:Mapped[list["Attendance"]] = relationship(back_populates="member")
 
 
-class Membership(Base):
-    __tablename__ = "Memberships"
+class MembershipPlan(Base):
+    __tablename__ = "Membership Plan"
     id:Mapped[int] = mapped_column(primary_key=True)
     name:Mapped[str] = mapped_column(String(100), nullable=False)
     duration:Mapped[int] = mapped_column(String(200))
