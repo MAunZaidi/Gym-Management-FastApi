@@ -4,7 +4,7 @@ from datetime import date
 class Memberships(BaseModel):
     member_id:int
     plan_id:int
-    trainer_id:int
+    trainer_id:int | None = None
     start_date:date
     end_date:date
     status: str

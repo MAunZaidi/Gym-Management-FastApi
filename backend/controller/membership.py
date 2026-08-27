@@ -40,7 +40,7 @@ async def RegisterMembership(db:AsyncSession, body:Memberships):
             status_code=400,
             detail="Plan is Inactive"
         )
-    membership_subscription = Memberships(
+    membership_subscription = Membership(
         member_id=body.member_id,
         plan_id=body.plan_id,
         trainer_id=body.trainer_id,
