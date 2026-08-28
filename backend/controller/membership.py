@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from model import Membership, Member, MembershipPlan
+from model import Membership, Member, MembershipPlan, MembershipStatus
 from fastapi import HTTPException
 from schemas.membership_schema import Memberships, Renew_Membership_Response
 from sqlalchemy import select
@@ -46,10 +46,23 @@ async def RegisterMembership(db:AsyncSession, body:Memberships):
         trainer_id=body.trainer_id,
         start_date=body.start_date,
         end_date=body.start_date + timedelta(days=is_plan.duration),
-        status=body.status
+        status=MembershipStatus.ACTIVE
     )
     db.add(membership_subscription)
     await db.commit()
     await db.refresh(membership_subscription)
     return membership_subscription
+
+
+async def GetMembership(db:AsyncSession, status:MembershipStatus | None = None, member_id:int | None = None, plan_name: str | None = None):
+    query = select(Membership)
+    if status is not None:
+        query = query.where(Membership.status==status)
+    if member_id is not None:
+        query = query.where(Membership.member_id==member_id)
+    if plan_name is not None:
+        query = query.join(MembershipPlan).where(MembershipPlan.name==plan_name)
+    result = await db.execute(query)
+    return result.scalars().all()
+    
     

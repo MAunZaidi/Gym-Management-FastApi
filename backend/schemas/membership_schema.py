@@ -6,11 +6,11 @@ class Memberships(BaseModel):
     plan_id:int
     trainer_id:int | None = None
     start_date:date
-    end_date:date
-    status: str
     
 class Membership_Response(Memberships):
     id:int
+    end_date: date
+    status: str
     
     class Config:
             from_attributes = True

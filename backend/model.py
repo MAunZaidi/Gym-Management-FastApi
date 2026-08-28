@@ -8,6 +8,12 @@ class Gender(str, enum.Enum):
     Male = "Male"
     Female = "Female"
     Other = "Other"
+
+class MembershipStatus(str, enum.Enum):
+    ACTIVE = "Active",
+    EXPIRED = "Expired",
+    CANCELLED = "Cancelled"
+    
     
 class Admin(Base):
     __tablename__ = "Admin"
@@ -70,7 +76,7 @@ class Membership(Base):
     trainer_id:Mapped[int | None] = mapped_column(ForeignKey("Trainers.id"),nullable=True)
     start_date:Mapped[date] = mapped_column(Date)
     end_date:Mapped[date] = mapped_column(Date)
-    status: Mapped[str] = mapped_column(String(20))
+    status:Mapped[MembershipStatus] = mapped_column(Enum(MembershipStatus), nullable=False)
     member:Mapped["Member"] = relationship(back_populates="memberships")
     plan:Mapped["MembershipPlan"] = relationship(back_populates="memberships")
     trainer:Mapped["Trainer"] = relationship(back_populates="memberships")
