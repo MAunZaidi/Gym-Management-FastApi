@@ -57,7 +57,7 @@ async def LoginLogic(db:AsyncSession, admin_body:LoginCreate):
     if expired_delta:
         exp = datetime.now(timezone.utc) + expired_delta
     else:
-        exp = datetime.now(timezone.utc) + timedelta(minutes=10)
+        exp = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     Token = jwt.encode({"_id":is_user.id, "exp":exp}, SECRET_KEY, algorithm=ALGORITHM)
     
     return{
