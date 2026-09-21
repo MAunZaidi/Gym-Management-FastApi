@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import getdb
 from model import Admin
@@ -22,3 +22,8 @@ async def LoginAdmin(LoginBody: admin_schema.LoginCreate, db: AsyncSession = Dep
 @router.get("/is_auth", response_model=admin_schema.AdminResponse)
 async def is_auth(user: Admin = Depends(helper.is_auth)):
     return user
+
+
+@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
+async def logout(user: Admin = Depends(helper.is_auth)):
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
