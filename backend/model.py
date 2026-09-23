@@ -1,7 +1,7 @@
 from database import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, Date, Boolean, DateTime, func, Enum, Float, Numeric, ForeignKey
-from datetime import datetime, date
+from sqlalchemy import String, Integer, Date, Boolean, DateTime, func, Enum, Float, Numeric, ForeignKey, Time
+from datetime import datetime, date, time
 import enum
 
 class Gender(str, enum.Enum):
@@ -13,6 +13,15 @@ class MembershipStatus(str, enum.Enum):
     ACTIVE = "Active",
     EXPIRED = "Expired",
     CANCELLED = "Cancelled"
+    
+class DaysOfWeek(str, enum.Enum):
+    MONDAY = "Monday"
+    TUESDAY = "Tuesday"
+    WEDNESDAY = "Wednesday"
+    THURSDAY = "Thursday"
+    FRIDAY = "Friday"
+    SATURDAY = "Saturday"
+    SUNDAY = "Sunday"
     
     
 class Admin(Base):
@@ -58,6 +67,7 @@ class Trainer(Base):
     joined_date: Mapped[date] = mapped_column(Date)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     memberships: Mapped[list["Membership"]] = relationship(back_populates="trainer")
+    gym_classes: Mapped[list["Gym_class"]] = relationship(back_populates="trainer")
 
 class Attendance(Base):
     __tablename__ = "Attendance"
@@ -80,3 +90,14 @@ class Membership(Base):
     member:Mapped["Member"] = relationship(back_populates="memberships")
     plan:Mapped["MembershipPlan"] = relationship(back_populates="memberships")
     trainer:Mapped["Trainer"] = relationship(back_populates="memberships")
+    
+class Gym_class(Base):
+    __tablename__ = "gym_classes"
+    id:Mapped[int] = mapped_column(primary_key=True, index=True)
+    name:Mapped[str] = mapped_column(String(200), nullable=False)
+    trainer_id:Mapped[int] = mapped_column(ForeignKey("Trainers.id"), nullable=False)
+    day_of_week:Mapped[DaysOfWeek] = mapped_column(Enum(DaysOfWeek), nullable=False)
+    start_time:Mapped[time] = mapped_column(Time,nullable=False)
+    duration_min:Mapped[int] = mapped_column(Integer,nullable=False)
+    capacity:Mapped[int] = mapped_column(Integer, nullable=False)
+    trainer:Mapped[Trainer] = relationship(back_populates="gym_classes")
