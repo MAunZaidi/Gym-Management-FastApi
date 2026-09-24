@@ -9,5 +9,19 @@ async def GetGymClasses(db:AsyncSession):
     return result.scalars().all()
 
 
-
+async def CreateGymClasses(db:AsyncSession, body:GymClasses):
+    is_trainer = await db.execute(select(Trainer).where(Trainer.id == body.trainer_id))
+    result =  is_trainer.scalar_one_or_none()
+    if result is None:
+        raise(HTTPException(
+            status_code=404,
+            detail= "Trainer not Found"
+         ))
+        
+    gym_class = Gym_class(**body.model_dump())
     
+    db.add(gym_class)
+    await db.commit()
+    await db.refresh(gym_class)
+    return gym_class
+        
