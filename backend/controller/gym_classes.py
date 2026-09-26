@@ -65,3 +65,11 @@ async def DeleteGymClass(db:AsyncSession, id:int):
     return{
         "Message":"Trainer has been deleted Sucessfully"
     }
+    
+async def ChangeTrainer(db:AsyncSession, gym_class_id:int, Trainer_id: int):
+    gym_class = await GetGymClassesById(db, gym_class_id)
+    await ValidateTrainer(db,Trainer_id)
+    gym_class.trainer_id = Trainer_id
+    await db.commit()
+    await db.refresh(gym_class)
+    return gym_class

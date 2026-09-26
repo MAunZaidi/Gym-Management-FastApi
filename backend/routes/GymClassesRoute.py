@@ -24,19 +24,13 @@ async def GetGymClassById(gym_class_id: int, db: AsyncSession = Depends(getdb)):
 
 
 @router.put("/{gym_class_id}", response_model=gym_classes_schema.GymClassesResponse)
-async def UpdateGymClass(
-    gym_class_id: int,
-    body: gym_classes_schema.GymClasses,
-    db: AsyncSession = Depends(getdb),
-    user: Admin = Depends(helper.is_auth)
-):
+async def UpdateGymClass(gym_class_id: int,body: gym_classes_schema.GymClasses,db: AsyncSession = Depends(getdb),user: Admin = Depends(helper.is_auth)):
     return await gym_classes.UpdateGymClasses(db, body, gym_class_id)
 
-
 @router.delete("/{gym_class_id}")
-async def DeleteGymClass(
-    gym_class_id: int,
-    db: AsyncSession = Depends(getdb),
-    user: Admin = Depends(helper.is_auth)
-):
+async def DeleteGymClass(gym_class_id: int,db: AsyncSession = Depends(getdb),user: Admin = Depends(helper.is_auth)):
     return await gym_classes.DeleteGymClass(db, gym_class_id)
+
+@router.patch("/{gym_class_id}/trainer",response_model=gym_classes_schema.GymClassesResponse)
+async def ChangeTrainer(gym_class_id: int,body: gym_classes_schema.ChangeTrainerRequest,db: AsyncSession = Depends(getdb),user: Admin = Depends(helper.is_auth)):
+    return await gym_classes.ChangeTrainer(db,gym_class_id,body.trainer_id)
