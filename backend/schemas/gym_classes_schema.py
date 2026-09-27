@@ -16,5 +16,5 @@ class GymClassesResponse(GymClasses):
     class Config:
         from_attributes = True
         
-class ChangeTrainerResponse(BaseModel):
+class ChangeTrainerRequest(BaseModel):
     trainer_id:int
