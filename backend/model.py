@@ -2,6 +2,8 @@ from database import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer, Date, Boolean, DateTime, func, Enum, Float, Numeric, ForeignKey, Time
 from datetime import datetime, date, time
+from decimal import Decimal
+
 import enum
 
 class Gender(str, enum.Enum):
@@ -22,7 +24,13 @@ class DaysOfWeek(str, enum.Enum):
     FRIDAY = "Friday"
     SATURDAY = "Saturday"
     SUNDAY = "Sunday"
-    
+
+class PaymentStatus(str, enum.Enum):
+    PENDING = "PENDING"
+    PAID = "PAID"
+    DUE = "DUE"
+    FAILED = "FAILED"
+    REFUNDED = "REFUNDED"
     
 class Admin(Base):
     __tablename__ = "Admin"
@@ -90,6 +98,7 @@ class Membership(Base):
     member:Mapped["Member"] = relationship(back_populates="memberships")
     plan:Mapped["MembershipPlan"] = relationship(back_populates="memberships")
     trainer:Mapped["Trainer"] = relationship(back_populates="memberships")
+    payment:Mapped[list["Payment"]] = relationship(back_populates="memberships")
     
 class Gym_class(Base):
     __tablename__ = "gym_classes"
@@ -101,3 +110,15 @@ class Gym_class(Base):
     duration_min:Mapped[int] = mapped_column(Integer,nullable=False)
     capacity:Mapped[int] = mapped_column(Integer, nullable=False)
     trainer:Mapped[Trainer] = relationship(back_populates="gym_classes")
+    
+
+class Payment(Base):
+    __tablename__ = "payment"
+    id:Mapped[int] = mapped_column(primary_key=True, index=True)
+    membership_id:Mapped[int] = mapped_column(ForeignKey("memberships.id"))
+    amount: Mapped[Decimal] = mapped_column(Numeric(10, 3))
+    payment_date:Mapped[date] = mapped_column(Date)
+    payment_method:Mapped[str] = mapped_column(String(100))
+    status:Mapped[PaymentStatus] = mapped_column(Enum(PaymentStatus))
+    invoice_no:Mapped[str] = mapped_column(String(100))
+    memberships:Mapped["Membership"] = relationship(back_populates="payment")
