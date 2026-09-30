@@ -62,3 +62,22 @@ async def GetPaymentById(db: AsyncSession, payment_id: int):
 
     return payment
 
+async def EditPayment(db:AsyncSession, payment_id:int, body:PaymentData):
+    is_payment = await GetPaymentById(db, payment_id)
+    updated_data = body.model_dump()
+    membership_result = await db.execute(
+        select(Membership).where(Membership.id == body.membership_id)
+    )
+    membership = membership_result.scalar_one_or_none()
+    if membership is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Membership not Found"
+        )
+        
+    for key, value in updated_data.items():
+        setattr(key, value, is_payment)
+    
+    await db.commit()
+    await db.refresh(is_payment)
+    return is_payment

@@ -24,8 +24,11 @@ async def GetPayments(member_id: int | None = None,status: PaymentStatus | None 
 
 
 @router.get("/{payment_id}", response_model=payment_schema.PaymentResponse)
-async def GetPaymentById(
-    payment_id: int,
-    db: AsyncSession = Depends(getdb)
+async def GetPaymentById(payment_id: int, db: AsyncSession = Depends(getdb)
 ):
     return await payment.GetPaymentById(db, payment_id)
+
+
+@router.put("/{payment_id}", response_model=payment_schema.PaymentResponse)
+async def EditPaymentRoute(body:payment_schema.Payment, payment_id: int, db: AsyncSession = Depends(getdb), user: Admin = Depends(helper.is_auth)):
+    return await payment.EditPayment(db, payment_id, body)
