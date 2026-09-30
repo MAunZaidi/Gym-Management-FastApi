@@ -1,6 +1,6 @@
 from database import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, Date, Boolean, DateTime, func, Enum, Float, Numeric, ForeignKey, Time
+from sqlalchemy import String, Integer, Date, Boolean, DateTime, func, Enum, Float, Numeric, ForeignKey, Time,UniqueConstraint
 from datetime import datetime, date, time
 from decimal import Decimal
 
@@ -52,7 +52,7 @@ class Member(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     attendance:Mapped[list["Attendance"]] = relationship(back_populates="member")
     memberships:Mapped[list["Membership"]] = relationship(back_populates="member")
-
+    class_bookings: Mapped[list["ClassBooking"]] = relationship(back_populates="member")
 
 class MembershipPlan(Base):
     __tablename__ = "MembershipPlan"
@@ -100,6 +100,7 @@ class Membership(Base):
     trainer:Mapped["Trainer"] = relationship(back_populates="memberships")
     payment:Mapped[list["Payment"]] = relationship(back_populates="memberships")
     
+    
 class Gym_class(Base):
     __tablename__ = "gym_classes"
     id:Mapped[int] = mapped_column(primary_key=True, index=True)
@@ -110,6 +111,7 @@ class Gym_class(Base):
     duration_min:Mapped[int] = mapped_column(Integer,nullable=False)
     capacity:Mapped[int] = mapped_column(Integer, nullable=False)
     trainer:Mapped[Trainer] = relationship(back_populates="gym_classes")
+    class_bookings: Mapped[list["ClassBooking"]] = relationship(back_populates="gym_classes")
     
 
 class Payment(Base):
@@ -122,3 +124,30 @@ class Payment(Base):
     status:Mapped[PaymentStatus] = mapped_column(Enum(PaymentStatus))
     invoice_no:Mapped[str] = mapped_column(String(100))
     memberships:Mapped["Membership"] = relationship(back_populates="payment")
+
+
+
+class BookingStatus(str, enum.Enum):
+    BOOKED = "BOOKED"
+    CANCELLED = "CANCELLED"
+    ATTENDED = "ATTENDED"
+    NO_SHOW = "NO_SHOW"
+
+
+class ClassBooking(Base):
+    __tablename__ = "class_bookings"
+    __table_args__ = (UniqueConstraint(
+            "class_id",
+            "member_id",
+            name="uq_class_member_booking"
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(primary_key=True,index=True)
+    class_id: Mapped[int] = mapped_column( ForeignKey("gym_classes.id"), nullable=False)
+    member_id: Mapped[int] = mapped_column(ForeignKey("members.id"),nullable=False)
+    booking_date: Mapped[date] = mapped_column(Date,default=date.today,nullable=False)
+    status: Mapped[BookingStatus] = mapped_column(Enum(BookingStatus),default=BookingStatus.BOOKED,nullable=False)
+    gym_classes: Mapped["Gym_class"] = relationship(back_populates="class_bookings")
+    member: Mapped["Member"] = relationship(back_populates="class_bookings")
+    
