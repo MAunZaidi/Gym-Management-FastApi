@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Dumbbell, Eye, Pencil, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { HolographicSurface } from "@/components/ui/holographic-surface";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { FormField, SelectField } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
@@ -54,9 +55,10 @@ export default function TrainersPage() {
       <Panel><SearchInput value={query} onChange={setQuery} placeholder="Search trainers" /></Panel>
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {filtered.map((trainer) => (
-          <article key={trainer.id} className="rounded-adapt border border-adapt-muted bg-adapt-surface p-5 shadow-panel">
+          <article data-reveal key={trainer.id} className="adapt-panel adapt-stat rounded-adapt border border-adapt-muted bg-adapt-surface p-6 shadow-panel">
+            <HolographicSurface tilt />
             <div className="flex items-start justify-between">
-              <span className="grid h-11 w-11 place-items-center rounded-adapt bg-adapt-primary/15 text-adapt-primary"><Dumbbell className="h-5 w-5" /></span>
+              <span className="grid h-11 w-11 place-items-center rounded-adapt bg-adapt-primary/15 text-indigo-300"><Dumbbell className="h-5 w-5" /></span>
               <StatusBadge label={trainer.status} />
             </div>
             <h2 className="mt-5 text-xl font-semibold">{trainer.name}</h2>

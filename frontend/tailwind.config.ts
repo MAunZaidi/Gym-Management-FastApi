@@ -11,7 +11,8 @@ const config: Config = {
     extend: {
       colors: {
         adapt: {
-          primary: "#6D5DFB",
+          primary: "#4F46E5",
+          accent: "#6366F1",
           background: "#0F1115",
           surface: "#18181B",
           muted: "#27272A",
@@ -24,11 +25,11 @@ const config: Config = {
         }
       },
       borderRadius: {
-        adapt: "8px"
+        adapt: "15px"
       },
       boxShadow: {
         adapt: "0 18px 48px rgba(0, 0, 0, 0.28)",
-        panel: "0 1px 0 rgba(255, 255, 255, 0.04), 0 18px 36px rgba(0, 0, 0, 0.22)"
+        panel: "inset 0 1px 0 rgba(255, 255, 255, 0.035), 0 8px 24px rgba(0, 0, 0, 0.14)"
       },
       fontFamily: {
         sans: ["var(--font-inter)", "Inter", "sans-serif"],

@@ -69,52 +69,53 @@ export function AuthForm({ mode }: AuthFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-4">
+    <form onSubmit={handleSubmit} className="grid gap-5">
       {isSignup ? (
         <div className="relative">
           <UserRound className="absolute left-3 top-[39px] h-4 w-4 text-adapt-subtle" />
-          <FormField label="Name" value={name} onChange={(event) => setName(event.target.value)} placeholder="Alex Morgan" className="pl-9" />
+          <FormField label="Name" autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} placeholder="Alex Morgan" className="pl-9" />
         </div>
       ) : null}
       <div className="relative">
         <Mail className="absolute left-3 top-[39px] h-4 w-4 text-adapt-subtle" />
-        <FormField label="Email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="admin@adaptgym.test" className="pl-9" />
+        <FormField label="Email" type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="admin@adaptgym.test" className="pl-9" />
       </div>
       <div className="relative">
         <LockKeyhole className="absolute left-3 top-[39px] h-4 w-4 text-adapt-subtle" />
         <FormField
           label="Password"
           type={showPassword ? "text" : "password"}
+          autoComplete={isSignup ? "new-password" : "current-password"}
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           placeholder="Enter your password"
           className="pl-9 pr-11"
         />
-        <button
+        <Button
+          variant="ghost"
           type="button"
           onClick={() => setShowPassword((value) => !value)}
-          className="absolute right-3 top-[37px] rounded p-1 text-adapt-subtle transition hover:text-adapt-text"
+          className="absolute right-2 top-[30px] h-9 min-h-9 w-9"
           aria-label={showPassword ? "Hide password" : "Show password"}
-        >
-          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-        </button>
+          icon={showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+        />
       </div>
       <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
         <label className="inline-flex items-center gap-2 text-adapt-subtle">
           <input type="checkbox" checked={remember} onChange={(event) => setRemember(event.target.checked)} className="h-4 w-4 accent-adapt-primary" />
           Remember me
         </label>
-        <Link href="/login?forgot=true" className="font-medium text-adapt-primary hover:text-white">
+        <Link href="/login?forgot=true" className="font-medium text-indigo-300 transition-colors hover:text-white">
           Forgot password?
         </Link>
       </div>
-      {error ? <div className="rounded-adapt border border-rose-300/25 bg-rose-300/10 px-3 py-2 text-sm text-rose-100">{error}</div> : null}
-      <Button type="submit" disabled={loading} icon={loading ? <Loader2 className="h-4 w-4 animate-spin" /> : undefined}>
+      {error ? <div role="alert" className="rounded-adapt border border-rose-300/25 bg-rose-300/10 px-3 py-2 text-sm text-rose-100">{error}</div> : null}
+      <Button className="mt-1 min-h-12" type="submit" disabled={loading} icon={loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <LockKeyhole className="h-4 w-4" />}>
         {isSignup ? "Create ADAPT account" : "Login to ADAPT"}
       </Button>
       <p className="text-center text-sm text-adapt-subtle">
         {isSignup ? "Already managing a gym?" : "New to ADAPT?"}{" "}
-        <Link href={isSignup ? "/login" : "/signup"} className="font-semibold text-adapt-primary hover:text-white">
+        <Link href={isSignup ? "/login" : "/signup"} className="font-medium text-indigo-300 transition-colors hover:text-white">
           {isSignup ? "Login" : "Create an account"}
         </Link>
       </p>

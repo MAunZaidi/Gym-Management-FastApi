@@ -8,10 +8,8 @@ import { StatCard } from "@/components/dashboard/stat-card";
 import { MiniChart } from "@/components/dashboard/mini-chart";
 import { members, memberships, payments, gymClasses } from "@/lib/mock-data";
 import { daysUntil, formatCurrency, formatDate } from "@/lib/utils";
-import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 
 export default function DashboardPage() {
-  const ref = useGsapReveal<HTMLDivElement>();
   const activeMemberships = memberships.filter((item) => item.status === "Active");
   const paid = payments.filter((payment) => payment.status === "Paid");
   const due = payments.filter((payment) => payment.status === "Due");
@@ -19,7 +17,7 @@ export default function DashboardPage() {
   const expiring = activeMemberships.filter((membership) => daysUntil(membership.endDate) <= 45);
 
   return (
-    <div ref={ref} className="grid gap-6">
+    <div className="grid gap-6">
       <PageHeader
         title="Dashboard"
         description="A quick operational snapshot of members, revenue, attendance, upcoming classes, and membership risk."
@@ -32,7 +30,7 @@ export default function DashboardPage() {
       </section>
       <section className="grid gap-4 xl:grid-cols-[1.35fr_0.95fr]">
         <MiniChart title="Revenue Trend" values={[6200, 7800, 7300, 9300, 10800, 12400]} labels={["May", "Jun", "Jul", "Aug", "Sep", "Oct"]} />
-        <MiniChart title="Membership Growth" values={[62, 78, 95, 102, 116, 128]} labels={["May", "Jun", "Jul", "Aug", "Sep", "Oct"]} />
+        <MiniChart title="Membership Growth" values={[62, 78, 95, 102, 116, 128]} labels={["May", "Jun", "Jul", "Aug", "Sep", "Oct"]} tone="teal" />
       </section>
       <section className="grid gap-4 xl:grid-cols-3">
         <Panel>

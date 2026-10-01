@@ -22,4 +22,11 @@ export const navItems = [
   { href: "/attendance", label: "Attendance", icon: Activity }
 ];
 
+export const navGroups = [
+  { label: "Main", hrefs: ["/dashboard"] },
+  { label: "Members & Plans", hrefs: ["/members", "/membership-plans", "/memberships"] },
+  { label: "Operations", hrefs: ["/payments", "/trainers"] },
+  { label: "Schedule", hrefs: ["/classes", "/bookings", "/attendance"] }
+].map((group) => ({ ...group, items: navItems.filter((item) => group.hrefs.includes(item.href)) }));
+
 export const authStorageKey = "adapt-auth-user";

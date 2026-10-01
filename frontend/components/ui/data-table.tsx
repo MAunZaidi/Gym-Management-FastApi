@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { HolographicSurface } from "@/components/ui/holographic-surface";
 
 export type DataTableColumn<T> = {
   key: string;
@@ -18,13 +19,14 @@ export function DataTable<T>({
   getKey: (item: T) => string;
 }) {
   return (
-    <div className="overflow-hidden rounded-adapt border border-adapt-muted bg-adapt-surface">
+    <div data-reveal className="adapt-panel overflow-hidden rounded-adapt border border-adapt-muted bg-adapt-surface shadow-panel">
+      <HolographicSurface quiet />
       <div className="hidden overflow-x-auto lg:block">
         <table className="min-w-full divide-y divide-adapt-muted">
-          <thead className="bg-white/[0.03]">
+          <thead className="bg-[#1d1d21]">
             <tr>
               {columns.map((column) => (
-                <th key={column.key} className={cn("px-4 py-3 text-left font-mono text-xs font-semibold uppercase tracking-[0.14em] text-adapt-subtle", column.className)}>
+                <th key={column.key} className={cn("px-4 py-4 text-left font-mono text-[11px] font-medium uppercase text-adapt-subtle", column.className)}>
                   {column.header}
                 </th>
               ))}
@@ -32,7 +34,7 @@ export function DataTable<T>({
           </thead>
           <tbody className="divide-y divide-adapt-muted">
             {items.map((item) => (
-              <tr key={getKey(item)} className="transition hover:bg-white/[0.03]">
+              <tr key={getKey(item)} className="transition-colors hover:bg-white/[0.035]">
                 {columns.map((column) => (
                   <td key={column.key} className={cn("px-4 py-4 text-sm text-zinc-200", column.className)}>
                     {column.render(item)}

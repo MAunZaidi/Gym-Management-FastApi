@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Check, Eye, Pencil, Plus, Power, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { HolographicSurface } from "@/components/ui/holographic-surface";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormField, TextAreaField, ToggleField } from "@/components/ui/form-field";
@@ -61,7 +62,8 @@ export default function MembershipPlansPage() {
       {filtered.length ? (
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {filtered.map((plan) => (
-            <article key={plan.id} className="group rounded-adapt border border-adapt-muted bg-adapt-surface p-5 shadow-panel transition hover:-translate-y-1 hover:border-adapt-primary/50">
+            <article data-reveal key={plan.id} className="adapt-panel adapt-plan group rounded-adapt border border-adapt-muted bg-adapt-surface p-6 shadow-panel">
+              <HolographicSurface tilt />
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <StatusBadge label={plan.active ? "Active" : "Inactive"} />

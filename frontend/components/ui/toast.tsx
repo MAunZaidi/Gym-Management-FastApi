@@ -39,9 +39,9 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div className="fixed right-4 top-4 z-[60] grid w-[calc(100%-2rem)] max-w-sm gap-3">
+      <div aria-live="polite" aria-atomic="false" className="fixed right-4 top-4 z-[60] grid w-[calc(100%-2rem)] max-w-sm gap-3">
         {toasts.map((toast) => (
-          <div key={toast.id} className="rounded-adapt border border-adapt-muted bg-adapt-surface p-4 shadow-adapt">
+          <div key={toast.id} className="adapt-toast rounded-adapt border border-adapt-muted bg-adapt-surface p-4 shadow-adapt">
             <div className="flex items-start gap-3">
               {toast.type === "success" ? <CheckCircle2 className="mt-0.5 h-5 w-5 text-adapt-success" /> : <Info className="mt-0.5 h-5 w-5 text-adapt-primary" />}
               <div className="min-w-0 flex-1">

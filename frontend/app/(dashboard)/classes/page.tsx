@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { CalendarClock, Pencil, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { HolographicSurface } from "@/components/ui/holographic-surface";
 import { FormField, SelectField, TextAreaField } from "@/components/ui/form-field";
 import { Modal } from "@/components/ui/modal";
 import { PageHeader } from "@/components/ui/page-header";
@@ -36,7 +37,8 @@ export default function ClassesPage() {
       <Panel><SearchInput value={query} onChange={setQuery} placeholder="Search classes" /></Panel>
       <section className="grid gap-4 lg:grid-cols-2">
         {filtered.map((item) => (
-          <article key={item.id} className="rounded-adapt border border-adapt-muted bg-adapt-surface p-5 shadow-panel">
+          <article data-reveal key={item.id} className="adapt-panel adapt-stat rounded-adapt border border-adapt-muted bg-adapt-surface p-6 shadow-panel">
+            <HolographicSurface tilt />
             <div className="flex items-start justify-between gap-4">
               <div className="flex gap-3"><span className="grid h-11 w-11 place-items-center rounded-adapt bg-sky-300/15 text-sky-200"><CalendarClock className="h-5 w-5" /></span><div><h2 className="text-xl font-semibold">{item.name}</h2><p className="mt-1 text-sm text-adapt-subtle">{item.schedule} · {item.durationMinutes} min</p></div></div>
               <StatusBadge label={item.status} />

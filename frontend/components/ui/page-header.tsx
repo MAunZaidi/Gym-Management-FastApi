@@ -10,10 +10,10 @@ export function PageHeader({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <p className="font-mono text-xs font-semibold uppercase tracking-[0.18em] text-adapt-primary">ADAPT OPERATIONS</p>
-        <h1 className="mt-2 text-2xl font-semibold text-adapt-text sm:text-3xl">{title}</h1>
+    <div data-reveal className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="min-w-0">
+        <p className="flex items-center gap-2 font-mono text-[11px] text-adapt-subtle"><span className="h-1.5 w-1.5 rounded-full bg-adapt-accent" /> ADAPT / OPERATIONS</p>
+        <h1 className="mt-3 text-2xl font-medium text-adapt-text sm:text-3xl">{title}</h1>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-adapt-subtle">{description}</p>
       </div>
       {action}
