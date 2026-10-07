@@ -21,10 +21,10 @@ async def CheckOut(body: CheckOutData, db: AsyncSession = Depends(getdb), user: 
 
 
 @router.get("", response_model=list[AttendanceResponse])
-async def GetAttendance(member_id: int | None = None, date: date | None = None, db: AsyncSession = Depends(getdb)):
+async def GetAttendance(member_id: int | None = None, date: date | None = None, db: AsyncSession = Depends(getdb), user: Admin = Depends(helper.is_auth)):
     return await attendance.GetAttendance(db, member_id, date)
 
 
 @router.get("/today", response_model=list[AttendanceResponse])
-async def GetTodayAttendance(db: AsyncSession = Depends(getdb)):
+async def GetTodayAttendance(db: AsyncSession = Depends(getdb), user: Admin = Depends(helper.is_auth)):
     return await attendance.GetTodayAttendance(db)

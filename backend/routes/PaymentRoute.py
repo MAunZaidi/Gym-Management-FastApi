@@ -19,12 +19,12 @@ async def RecordPayment(body: payment_schema.Payment,db: AsyncSession = Depends(
 
 
 @router.get("", response_model=list[payment_schema.PaymentResponse])
-async def GetPayments(member_id: int | None = None,status: PaymentStatus | None = None,payment_date: date | None = None,db: AsyncSession = Depends(getdb)):
+async def GetPayments(member_id: int | None = None,status: PaymentStatus | None = None,payment_date: date | None = None,db: AsyncSession = Depends(getdb), user: Admin = Depends(helper.is_auth)):
     return await payment.GetPayment(db, member_id, status, payment_date)
 
 
 @router.get("/{payment_id}", response_model=payment_schema.PaymentResponse)
-async def GetPaymentById(payment_id: int, db: AsyncSession = Depends(getdb)
+async def GetPaymentById(payment_id: int, db: AsyncSession = Depends(getdb), user: Admin = Depends(helper.is_auth)
 ):
     return await payment.GetPaymentById(db, payment_id)
 

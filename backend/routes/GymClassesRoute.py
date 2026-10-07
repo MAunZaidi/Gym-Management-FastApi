@@ -14,7 +14,7 @@ async def GetGymClasses(db:AsyncSession = Depends(getdb)):
     return await gym_classes.GetGymClasses(db)
 
 @router.post("", response_model = gym_classes_schema.GymClassesResponse)
-async def CreateGymClasses(body:gym_classes_schema.GymClasses, db:AsyncSession = Depends(getdb)):
+async def CreateGymClasses(body:gym_classes_schema.GymClasses, db:AsyncSession = Depends(getdb), user: Admin = Depends(helper.is_auth)):
     return await gym_classes.CreateGymClasses(db, body)
 
 

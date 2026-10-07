@@ -17,17 +17,18 @@ async def GetMembership(
     status:MembershipStatus| None = None,
     member_id:int | None = None,
     plan_name:str | None = None,
-    db:AsyncSession = Depends(getdb)):
+    db:AsyncSession = Depends(getdb),
+    user: Admin = Depends(helper.is_auth)):
     return await membership.GetMembership(db, status, member_id, plan_name)
 
 
 @router.get("/expiring-soon", response_model=list[membership_schema.Membership_Response])
-async def GetExpiringSoonMemberships(days:int = 7, db:AsyncSession = Depends(getdb)):
+async def GetExpiringSoonMemberships(days:int = 7, db:AsyncSession = Depends(getdb), user: Admin = Depends(helper.is_auth)):
     return await membership.GetExpiringSoonMemberships(db, days)
 
 
 @router.get("/{membership_id}", response_model=membership_schema.Membership_Response)
-async def GetMembershipById(membership_id:int, db:AsyncSession = Depends(getdb)):
+async def GetMembershipById(membership_id:int, db:AsyncSession = Depends(getdb), user: Admin = Depends(helper.is_auth)):
     return await membership.GetMembershipByid(db, membership_id)
 
 

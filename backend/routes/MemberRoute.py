@@ -15,12 +15,12 @@ async def CreateMember(MemberBody: member_schema.MemberData, db: AsyncSession = 
 
 
 @router.get("", response_model=list[member_schema.MemberResponse])
-async def GetMembers(db: AsyncSession = Depends(getdb)):
+async def GetMembers(db: AsyncSession = Depends(getdb), user: Admin = Depends(helper.is_auth)):
     return await member.GetMember(db)
 
 
 @router.get("/{memberid}", response_model=member_schema.MemberResponse)
-async def GetMemberById(memberid: int, db: AsyncSession = Depends(getdb)):
+async def GetMemberById(memberid: int, db: AsyncSession = Depends(getdb), user: Admin = Depends(helper.is_auth)):
     return await member.GetMemberByid(db, memberid)
 
 
@@ -35,5 +35,5 @@ async def DeleteMember(memberid: int, db: AsyncSession = Depends(getdb), user: A
 
 
 @router.get("/{member_id}/attendance", response_model=list[attendance_schema.AttendanceResponse])
-async def GetMemberAttendance(member_id:int, db:AsyncSession=Depends(getdb)):
+async def GetMemberAttendance(member_id:int, db:AsyncSession=Depends(getdb), user: Admin = Depends(helper.is_auth)):
     return await attendance.GetAttendance(db, member_id, None)

@@ -28,7 +28,8 @@ async def GetClassBookings(
     class_id: int | None = None,
     status: BookingStatus | None = None,
     booking_date: date | None = None,
-    db: AsyncSession = Depends(getdb)
+    db: AsyncSession = Depends(getdb),
+    user: Admin = Depends(helper.is_auth)
 ):
     return await class_booking.GetClassBookings(
         db,
@@ -42,7 +43,8 @@ async def GetClassBookings(
 @router.get("/{class_booking_id}", response_model=class_booking_schema.ClassBookingResponse)
 async def GetClassBookingById(
     class_booking_id: int,
-    db: AsyncSession = Depends(getdb)
+    db: AsyncSession = Depends(getdb),
+    user: Admin = Depends(helper.is_auth)
 ):
     return await class_booking.GetClassBookingById(db, class_booking_id)
 
