@@ -60,7 +60,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         title: isSignup ? "Workspace created" : "Welcome back",
         description: "Redirecting you to the operations dashboard."
       });
-      router.replace("/dashboard");
+      router.replace("/admin");
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : "Authentication failed.");
     } finally {

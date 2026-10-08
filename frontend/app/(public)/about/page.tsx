@@ -1,0 +1,10 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { principles } from "@/lib/public-content";
+
+export const metadata: Metadata = { title: "About", description: "Learn about the training philosophy and community behind ADAPT." };
+
+export default function AboutPage() {
+  return <><header className="public-page-header public-container" data-reveal><span className="public-eyebrow">05 / About ADAPT</span><h1>CHANGE IS<br /><em>THE POINT.</em></h1><p>Training should make life bigger. ADAPT is a place to start, reset, and keep building toward what matters to you.</p></header><section className="public-section public-section--panel"><div className="public-container public-about-grid"><div data-reveal><span className="public-eyebrow">Our philosophy</span><h2>NOT JUST STRONGER.<br /><span>MORE CAPABLE.</span></h2></div><div data-reveal><p>We believe in training that changes with you. Some days call for a new challenge. Others call for consistency, recovery, or simply showing up. All of it counts.</p><p>Our approach brings focused coaching, shared energy, and room to move at your own pace. You bring your goals; we help you keep them in motion.</p></div></div></section><section className="public-section public-container"><div className="public-section-heading" data-reveal><div><span className="public-eyebrow">What guides us</span><h2>THE ADAPT STANDARD.</h2></div></div><div className="public-principles__grid">{principles.map((item) => <div key={item.number} data-reveal><span>{item.number}</span><ArrowUpRight size={20} /><h3>{item.title}</h3><p>{item.text}</p></div>)}</div></section><section className="public-cta public-container" data-reveal><span className="public-eyebrow">Come find your rhythm</span><h2>YOUR STORY<br /><em>IS NEXT.</em></h2><p>Take a look at the training options, or reach out to learn more.</p><div><Link href="/services" className="public-button">Explore services <ArrowUpRight size={18} /></Link><Link href="/contact" className="public-button public-button--outline">Get in touch <ArrowUpRight size={18} /></Link></div></section></>;
+}

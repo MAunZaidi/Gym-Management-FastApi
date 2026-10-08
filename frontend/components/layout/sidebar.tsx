@@ -56,7 +56,7 @@ export function Sidebar({
       )}
     >
       <div className={cn("flex h-18 shrink-0 items-center justify-between gap-2 px-5", collapsed && "justify-center px-3")}>
-        <Link href="/dashboard" aria-label="ADAPT dashboard" className="flex min-w-0 items-center gap-3 rounded-lg" onClick={onClose}>
+        <Link href="/admin" aria-label="ADAPT dashboard" className="flex min-w-0 items-center gap-3 rounded-lg" onClick={onClose}>
           <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] border border-white/10 bg-adapt-primary text-white shadow-panel">
             <Dumbbell className="h-[18px] w-[18px]" strokeWidth={1.75} />
           </span>

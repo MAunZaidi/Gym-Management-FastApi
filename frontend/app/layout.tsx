@@ -6,8 +6,8 @@ import "@fontsource-variable/jetbrains-mono";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ADAPT Gym Management System",
-  description: "Modern gym management dashboard for ADAPT administrators and staff."
+  title: { default: "ADAPT | Train for what comes next", template: "%s | ADAPT" },
+  description: "Find your pace, build your strength, and train with purpose at ADAPT."
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
