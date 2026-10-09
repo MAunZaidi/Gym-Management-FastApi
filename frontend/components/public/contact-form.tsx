@@ -38,7 +38,7 @@ export function ContactForm({ interest }: { interest?: string }) {
     setStatus("Your email app should open with this message ready to send. Please send it there to reach ADAPT.");
   }
 
-  return <form className="public-contact-form" onSubmit={handleSubmit} noValidate>
+  return <form className="public-contact-form" onSubmit={handleSubmit} noValidate data-scroll="card">
     <div className="public-contact-form__row">
       <label>Name<input value={name} onChange={(event) => { setName(event.target.value); setStatus(""); }} autoComplete="name" placeholder="Your name" required minLength={2} aria-invalid={submitted && !!nameError} aria-describedby={submitted && nameError ? "contact-name-error" : undefined} />{submitted && nameError ? <span id="contact-name-error" className="public-contact-form__field-error">{nameError}</span> : null}</label>
       <label>Email<input value={email} onChange={(event) => { setEmail(event.target.value); setStatus(""); }} autoComplete="email" type="email" placeholder="you@example.com" required aria-invalid={submitted && !!emailError} aria-describedby={submitted && emailError ? "contact-email-error" : undefined} />{submitted && emailError ? <span id="contact-email-error" className="public-contact-form__field-error">{emailError}</span> : null}</label>

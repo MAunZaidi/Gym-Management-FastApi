@@ -72,7 +72,7 @@ export function Navbar() {
         <nav className="public-nav__desktop" aria-label="Public navigation">
           {publicNav.map((item) => <Link key={item.href} href={item.href} aria-current={pathname === item.href ? "page" : undefined}>{item.label}</Link>)}
         </nav>
-        <Link className="public-nav__cta" href="/class-booking" aria-current={pathname === "/class-booking" ? "page" : undefined}>Book a class <ArrowUpRight size={16} aria-hidden="true" /></Link>
+        <Link className="public-nav__cta btn-magnetic" href="/class-booking" aria-current={pathname === "/class-booking" ? "page" : undefined}>Book a class <ArrowUpRight size={16} aria-hidden="true" /></Link>
         <button ref={toggleRef} className="public-nav__toggle" type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="public-mobile-nav" onClick={() => setOpen((value) => !value)}>
           {open ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
         </button>
@@ -80,7 +80,7 @@ export function Navbar() {
       </div>
       <nav id="public-mobile-nav" className={`public-nav__mobile ${open ? "is-open" : ""}`} aria-label="Mobile navigation" inert={!open}>
         {publicNav.map((item) => <Link key={item.href} href={item.href} onClick={() => setOpen(false)} aria-current={pathname === item.href ? "page" : undefined}>{item.label}<ArrowUpRight size={17} aria-hidden="true" /></Link>)}
-        <Link className="public-nav__mobile-cta" href="/class-booking" onClick={() => setOpen(false)} aria-current={pathname === "/class-booking" ? "page" : undefined}>Book a class <ArrowUpRight size={17} aria-hidden="true" /></Link>
+        <Link className="public-nav__mobile-cta btn-magnetic" href="/class-booking" onClick={() => setOpen(false)} aria-current={pathname === "/class-booking" ? "page" : undefined}>Book a class <ArrowUpRight size={17} aria-hidden="true" /></Link>
       </nav>
     </header>
   );

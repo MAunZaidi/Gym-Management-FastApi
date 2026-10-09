@@ -17,7 +17,7 @@ export const services = [
   { number: "04", name: "Functional training", detail: "Move with power and confidence well beyond the gym floor.", icon: Zap, image: "/images/trainer-editorial-03.jpg", imagePosition: "center 36%" },
   { number: "05", name: "Cardio conditioning", detail: "Build endurance with a pace and progression that work for you.", icon: Activity, image: "/images/service-cardio.jpg", imagePosition: "center 30%" },
   { number: "06", name: "Mobility & recovery", detail: "Train for longevity with better movement and intentional recovery.", icon: HeartPulse, image: "/images/trainer-editorial-04.jpg", imagePosition: "center 21%" },
-  { number: "07", name: "Nutrition support", detail: "Practical habits to support training, energy, and consistency.", icon: Sparkles, image: null, imagePosition: "center" }
+  { number: "07", name: "Nutrition support", detail: "Practical habits to support training, energy, and consistency.", icon: Sparkles, image: "/images/Nutrition.jpg", imagePosition: "center" }
 ];
 
 export const principles = [

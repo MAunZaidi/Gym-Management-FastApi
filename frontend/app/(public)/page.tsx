@@ -7,6 +7,14 @@ import { principles, services } from "@/lib/public-content";
 
 export const dynamic = "force-dynamic";
 
+const tickerItems = ["STRONGER EVERY DAY", "MOVE WITH PURPOSE", "PROGRESS IS PERSONAL", "BUILT TO ADAPT"];
+
+function TickerGroup({ duplicate = false }: { duplicate?: boolean }) {
+  return <div className="public-ticker__group" aria-hidden={duplicate || undefined}>
+    {tickerItems.map((item) => <span key={item}>{item}<i aria-hidden="true" /></span>)}
+  </div>;
+}
+
 export default async function HomePage() {
   const [plans, classes, trainers] = await Promise.all([getPublicPlans(), getPublicClasses(), getPublicTrainers()]);
   const trainerNames = new Map(trainers.items.map((trainer) => [trainer.id, trainer.name]));
@@ -26,7 +34,7 @@ export default async function HomePage() {
       </div>
     </section>
 
-    <div className="public-ticker" aria-label="ADAPT training values"><div className="public-container"><span>STRONGER EVERY DAY</span><i /> <span>MOVE WITH PURPOSE</span><i /> <span>PROGRESS IS PERSONAL</span><i /> <span>BUILT TO ADAPT</span></div></div>
+    <div className="public-ticker" aria-label="ADAPT training values"><div className="public-ticker__track"><TickerGroup /><TickerGroup duplicate /></div></div>
 
     <section id="discover" className="public-section public-container public-intro"><div data-reveal><span className="public-eyebrow">The ADAPT approach</span><h2>THE WORK IS YOURS.<br /><span>THE SUPPORT IS OURS.</span></h2></div><div data-reveal><p>There is no single way to get stronger. ADAPT brings thoughtful coaching, varied training, and a welcoming community together so you can build a routine that lasts.</p><Link href="/about" className="public-text-link">Get to know ADAPT <ArrowUpRight size={17} /></Link></div></section>
 

@@ -17,7 +17,7 @@ const InteractiveHoverButton = React.forwardRef<
       type="button"
       className={cn(
         interactiveHoverActionClasses,
-        "min-w-44 rounded-full border border-white/25 bg-[var(--public-panel,#0b1117)] px-5 py-3 text-sm text-white disabled:cursor-not-allowed disabled:opacity-50",
+        "public-button min-w-44 px-5 py-3 text-sm disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
       {...props}
