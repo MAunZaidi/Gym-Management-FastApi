@@ -148,56 +148,6 @@ Bearer <access_token>
 
 Tokens are currently configured to expire after 30 minutes.
 
-## API Overview
-
-| Resource | Method | Endpoint | Auth |
-| --- | --- | --- | --- |
-| Admin | POST | `/signup` | Public |
-| Admin | POST | `/login` | Public |
-| Admin | GET | `/is_auth` | Admin |
-| Admin | POST | `/logout` | Admin |
-| Members | GET | `/members` | Admin |
-| Members | GET | `/members/{memberid}` | Admin |
-| Members | POST | `/members` | Admin |
-| Members | PUT | `/members/{memberid}` | Admin |
-| Members | DELETE | `/members/{memberid}` | Admin |
-| Members | GET | `/members/{member_id}/attendance` | Admin |
-| Membership Plans | GET | `/plan` | Public |
-| Membership Plans | GET | `/plan/{ms_id}` | Public |
-| Membership Plans | POST | `/plan` | Admin |
-| Membership Plans | PUT | `/plan/{ms_id}` | Admin |
-| Membership Plans | DELETE | `/plan/{ms_id}` | Admin |
-| Trainers | GET | `/trainers` | Public |
-| Trainers | GET | `/trainers/{trainerid}` | Public |
-| Trainers | POST | `/trainers` | Admin |
-| Trainers | PUT | `/trainers/{trainerid}` | Admin |
-| Trainers | DELETE | `/trainers/{trainerid}` | Admin |
-| Memberships | GET | `/memberships` | Admin |
-| Memberships | GET | `/memberships/{membership_id}` | Admin |
-| Memberships | GET | `/memberships/expiring-soon?days=7` | Admin |
-| Memberships | POST | `/memberships` | Admin |
-| Memberships | PUT | `/memberships/{membership_id}` | Admin |
-| Memberships | POST | `/memberships/{membership_id}/renew` | Admin |
-| Memberships | DELETE | `/memberships/{membership_id}` | Admin |
-| Attendance | GET | `/attendance` | Admin |
-| Attendance | GET | `/attendance/today` | Admin |
-| Attendance | POST | `/attendance/check-in` | Admin |
-| Attendance | POST | `/attendance/check-out` | Admin |
-| Gym Classes | GET | `/gym-class` | Public |
-| Gym Classes | GET | `/gym-class/{gym_class_id}` | Public |
-| Gym Classes | POST | `/gym-class` | Admin |
-| Gym Classes | PUT | `/gym-class/{gym_class_id}` | Admin |
-| Gym Classes | PATCH | `/gym-class/{gym_class_id}/trainer` | Admin |
-| Gym Classes | DELETE | `/gym-class/{gym_class_id}` | Admin |
-| Payments | GET | `/payments` | Admin |
-| Payments | GET | `/payments/{payment_id}` | Admin |
-| Payments | POST | `/payments` | Admin |
-| Payments | PUT | `/payments/{payment_id}` | Admin |
-| Class Bookings | GET | `/classes` | Admin |
-| Class Bookings | GET | `/classes/{class_booking_id}` | Admin |
-| Class Bookings | POST | `/classes` | Admin |
-| Class Bookings | DELETE | `/classes/{class_booking_id}` | Admin |
-
 ## Example Requests
 
 ### Create an Admin
