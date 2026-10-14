@@ -2,6 +2,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
+from sqlalchemy import text
 from database import engine, Base
 from routes import AdminRoute, MemberRoute, MembershipPlanRoute, TrainerRoute, AttendanceRoute, MembershipRoute,GymClassesRoute, PaymentRoute, ClassBooking
 
@@ -31,6 +32,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/health", tags=["system"])
+async def health_check():
+    async with engine.connect() as connection:
+        await connection.execute(text("select 1"))
+    return {"status": "ok", "database": "connected"}
 
 app.include_router(AdminRoute.router)
 app.include_router(MemberRoute.router)

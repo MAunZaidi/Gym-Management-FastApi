@@ -119,6 +119,11 @@ DATABASE_URL=postgresql+asyncpg://user:password@localhost:5432/gym_db
 SECRET_KEY=your-secret-key
 ```
 
+For Supabase, open **Project Dashboard > Connect**, select the **Transaction
+pooler** URI (port `6543`), and use that as `DATABASE_URL`. Keep the database
+password URL-encoded. The backend automatically requires SSL and disables
+prepared-statement caches for Supavisor transaction mode.
+
 ### 5. Start the API
 
 ```bash
@@ -132,6 +137,27 @@ Then open:
 
 - Swagger UI: `http://localhost:8000/docs`
 - ReDoc: `http://localhost:8000/redoc`
+- Database health check: `http://localhost:8000/health`
+
+## Deploying to Vercel
+
+Deploy this monorepo as two Vercel projects:
+
+1. Create the API project with **Root Directory** set to `backend`.
+2. Add `DATABASE_URL`, `SECRET_KEY`, and `FRONTEND_ORIGINS` in the API
+   project's Environment Variables. Use the Supabase transaction-pooler URI
+   for `DATABASE_URL`; do not use the Supabase publishable key as the database
+   password.
+3. Deploy the API and verify `https://YOUR-API.vercel.app/health` returns
+   `{"status":"ok","database":"connected"}`.
+4. Create the web project with **Root Directory** set to `frontend`.
+5. Add `NEXT_PUBLIC_API_BASE_URL=https://YOUR-API.vercel.app` to the web
+   project's Environment Variables.
+6. Set the API project's `FRONTEND_ORIGINS` to the deployed frontend URL (and
+   any preview URLs you explicitly trust), then redeploy both projects.
+
+The local `.env` files are ignored by Git. Vercel does not receive them, so
+production values must be entered in each project's Vercel settings.
 
 ## Authentication Flow
 
