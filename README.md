@@ -5,70 +5,264 @@
 ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0-CB2929?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 
-A clean FastAPI backend for managing gym operations: admins, members, trainers, membership plans, active subscriptions, and attendance check-ins.
+A backend management system built with **FastAPI** for handling the core operations of a gym.
 
-The project is built around an async PostgreSQL workflow using SQLAlchemy 2.0, Pydantic schemas, JWT admin authentication, and organized route/controller layers.
+The project provides a modular foundation for managing members, trainers, memberships, attendance, and other gym operations. It is designed so developers can extend the existing architecture and turn it into their own gym management product, admin dashboard, or full-stack fitness platform.
 
-## Highlights
+## Technology Stack
 
-- Admin signup, login, logout, and JWT-based route protection
-- Member CRUD with unique email validation
-- Trainer CRUD with active/inactive status support
-- Membership plan CRUD with duration, pricing, and plan status
-- Membership creation, filtering, renewal, cancellation, and expiring-soon lookup
-- Attendance check-in/check-out flow with active session validation
-- Auto-created database tables on application startup
-- Interactive API documentation through FastAPI Swagger UI
-
-## Tech Stack
-
-| Layer | Tools |
+| Technology | Purpose |
 | --- | --- |
-| API | FastAPI, Uvicorn |
-| Database | PostgreSQL, asyncpg |
-| ORM | SQLAlchemy 2.0 async |
-| Validation | Pydantic |
-| Auth | PyJWT, OAuth2 bearer tokens |
-| Config | python-dotenv |
+| **FastAPI** | REST API framework |
+| **Python 3.11+** | Backend development |
+| **PostgreSQL** | Relational database |
+| **SQLAlchemy 2.0** | Async ORM and database operations |
+| **asyncpg** | Asynchronous PostgreSQL driver |
+| **Pydantic** | Request and response validation |
+| **JWT / PyJWT** | Admin authentication |
+| **OAuth2 Bearer** | Protected route authentication |
+| **Uvicorn** | ASGI application server |
+| **python-dotenv** | Environment configuration |
 
-## Project Structure
+The application follows an asynchronous database workflow using FastAPI and SQLAlchemy's `AsyncSession`.
+
+---
+
+# Key Modules
+
+### Admin Authentication
+Handles administrator accounts and access to protected functionality.
+
+### Members
+Manages gym member information and account status.
+
+### Trainers
+Stores and manages trainer information and availability status.
+
+### Membership Plans
+Defines the membership packages offered by the gym, including duration and pricing.
+
+### Memberships
+Connects members with membership plans and trainers while managing subscription lifecycle and renewals.
+
+### Attendance
+Tracks member check-ins and check-outs and prevents invalid attendance sessions.
+
+### Gym Classes
+Provides the model foundation for adding scheduled gym classes and trainer-led sessions.
+
+---
+
+# Project Architecture
+
+The backend separates responsibilities into **models, schemas, routes, and controllers**.
 
 ```text
 backend/
-|-- main.py                     # FastAPI app, lifespan hook, router registration
-|-- database.py                 # Async engine, session factory, database dependency
-|-- model.py                    # SQLAlchemy models and enums
-|-- requirements.txt            # Python dependencies
-|-- .env.example                # Environment variable template
-|-- controller/                 # Business logic for each resource
-|   |-- admin.py
-|   |-- attendance.py
-|   |-- member.py
-|   |-- membership.py
-|   |-- membership_plan.py
-|   `-- trainer.py
-|-- routes/                     # FastAPI routers
-|   |-- AdminRoute.py
-|   |-- AttendanceRoute.py
-|   |-- MemberRoute.py
-|   |-- MembershipPlanRoute.py
-|   |-- MembershipRoute.py
-|   `-- TrainerRoute.py
-|-- schemas/                    # Pydantic request/response models
-`-- utils/
-    `-- helper.py               # JWT auth dependency
+│
+├── main.py
+├── database.py
+├── model.py
+│
+├── controller/
+│   ├── admin.py
+│   ├── attendance.py
+│   ├── member.py
+│   ├── membership.py
+│   ├── membership_plan.py
+│   └── trainer.py
+│
+├── routes/
+│   ├── AdminRoute.py
+│   ├── AttendanceRoute.py
+│   ├── MemberRoute.py
+│   ├── MembershipPlanRoute.py
+│   ├── MembershipRoute.py
+│   └── TrainerRoute.py
+│
+├── schemas/
+│
+├── utils/
+│   └── helper.py
+│
+├── requirements.txt
+└── .env.example
 ```
 
-## Getting Started
+The general application flow is:
 
-### 1. Clone the Repository
+```text
+Client
+   │
+   ▼
+FastAPI Route
+   │
+   ▼
+Controller
+   │
+   ▼
+SQLAlchemy Model
+   │
+   ▼
+PostgreSQL
+```
+
+**Routes** define the available API endpoints.
+
+**Controllers** contain the business logic behind those endpoints.
+
+**Schemas** define and validate incoming and outgoing data.
+
+**Models** represent the database tables and relationships.
+
+This separation makes it easier to add new functionality without putting all application logic inside route files.
+
+---
+
+# Build Your Own Gym Product
+
+This repository can be used as a starting point rather than only as a finished application.
+
+You can clone the project and introduce your own modules while following the existing architecture.
+
+For example, suppose your gym requires a **Workout Program** module.
+
+### Step 1 — Create the Database Model
+
+Add the model to `model.py`:
+
+```python
+class WorkoutProgram(Base):
+    __tablename__ = "workout_programs"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str]
+    description: Mapped[str]
+    duration_weeks: Mapped[int]
+```
+
+This defines how workout programs will be stored in PostgreSQL.
+
+### Step 2 — Create the Schema
+
+Create the corresponding Pydantic schemas inside `schemas/`.
+
+```python
+class WorkoutProgramCreate(BaseModel):
+    name: str
+    description: str
+    duration_weeks: int
+```
+
+Schemas determine what data your API accepts and validates.
+
+### Step 3 — Create the Controller
+
+Add:
+
+```text
+controller/workout_program.py
+```
+
+The controller should contain the business logic required to create, retrieve, update, or delete workout programs.
+
+For example:
+
+```python
+async def create_workout_program(data, db):
+    program = WorkoutProgram(**data.model_dump())
+
+    db.add(program)
+    await db.commit()
+    await db.refresh(program)
+
+    return program
+```
+
+### Step 4 — Create the Route
+
+Add:
+
+```text
+routes/WorkoutProgramRoute.py
+```
+
+Define the API endpoints and connect them to the controller.
+
+```python
+router = APIRouter(prefix="/workout-programs")
+
+@router.post("/")
+async def create_program(
+    data: WorkoutProgramCreate,
+    db: AsyncSession = Depends(get_db)
+):
+    return await create_workout_program(data, db)
+```
+
+### Step 5 — Register the Router
+
+Import the new router inside `main.py`:
+
+```python
+from routes.WorkoutProgramRoute import router as workout_router
+
+app.include_router(workout_router)
+```
+
+Your new module now becomes part of the application.
+
+The same pattern can be followed for features such as:
+
+- Payments and invoices
+- Personal training packages
+- Workout programs
+- Exercise libraries
+- Nutrition plans
+- Class scheduling
+- Class bookings
+- Equipment management
+- Staff management
+- Member progress tracking
+- Notifications
+
+---
+
+# Turning the Backend Into a Full Product
+
+The API can serve as the backend for different types of applications.
+
+```text
+                    Gym Management Backend
+                             │
+             ┌───────────────┼───────────────┐
+             │               │               │
+             ▼               ▼               ▼
+       Admin Dashboard   Public Website   Member Portal
+             │               │               │
+             ▼               ▼               ▼
+      Manage Gym Data    View Services    Membership
+      Members/Plans      View Trainers    Attendance
+      Attendance         View Classes     Class Booking
+      Trainers           Memberships      Profile
+```
+
+For example, a **Next.js** frontend can consume the FastAPI endpoints to create an admin dashboard and public gym website.
+
+The backend can therefore act as the central management system while multiple frontend applications consume the same API.
+
+---
+
+# Getting Started
+
+## 1. Clone the Repository
 
 ```bash
 git clone <your-repository-url>
 cd "Gym managment App"
 ```
 
-### 2. Create a Virtual Environment
+## 2. Create a Virtual Environment
 
 ```bash
 python -m venv .venv
@@ -86,191 +280,91 @@ macOS/Linux:
 source .venv/bin/activate
 ```
 
-### 3. Install Dependencies
+## 3. Install Dependencies
 
 ```bash
 pip install -r backend/requirements.txt
 ```
 
-> Note: the current auth controller imports `pwdlib` for password hashing. If it is not already installed in your environment, install it with:
->
-> ```bash
-> pip install pwdlib
-> ```
+## 4. Configure Environment Variables
 
-### 4. Configure Environment Variables
+Create:
 
-Copy the example file:
-
-```bash
-copy backend\.env.example backend\.env
+```text
+backend/.env
 ```
 
-For macOS/Linux:
-
-```bash
-cp backend/.env.example backend/.env
-```
-
-Update `backend/.env`:
+Using `.env.example` as the template:
 
 ```env
 DATABASE_URL=postgresql+asyncpg://user:password@localhost:5432/gym_db
 SECRET_KEY=your-secret-key
 ```
 
-For Supabase, open **Project Dashboard > Connect**, select the **Transaction
-pooler** URI (port `6543`), and use that as `DATABASE_URL`. Keep the database
-password URL-encoded. The backend automatically requires SSL and disables
-prepared-statement caches for Supavisor transaction mode.
-
-### 5. Start the API
+## 5. Run the Backend
 
 ```bash
 cd backend
 python -m uvicorn main:app --reload --port 8000
 ```
 
-On Windows, invoking Uvicorn through Python avoids policies that block the `uvicorn.exe` launcher. If you are already in `backend/`, run only the second line.
+The API will be available locally on port `8000`.
 
-Then open:
-
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
-- Database health check: `http://localhost:8000/health`
-
-## Deploying to Vercel
-
-Deploy this monorepo as two Vercel projects:
-
-1. Create the API project with **Root Directory** set to `backend`.
-2. Add `DATABASE_URL`, `SECRET_KEY`, and `FRONTEND_ORIGINS` in the API
-   project's Environment Variables. Use the Supabase transaction-pooler URI
-   for `DATABASE_URL`; do not use the Supabase publishable key as the database
-   password.
-3. Deploy the API and verify `https://YOUR-API.vercel.app/health` returns
-   `{"status":"ok","database":"connected"}`.
-4. Create the web project with **Root Directory** set to `frontend`.
-5. Add `NEXT_PUBLIC_API_BASE_URL=https://YOUR-API.vercel.app` to the web
-   project's Environment Variables.
-6. Set the API project's `FRONTEND_ORIGINS` to the deployed frontend URL (and
-   any preview URLs you explicitly trust), then redeploy both projects.
-
-The local `.env` files are ignored by Git. Vercel does not receive them, so
-production values must be entered in each project's Vercel settings.
-
-## Authentication Flow
-
-Protected routes use a bearer token generated from admin login.
-
-1. Create an admin with `POST /signup`.
-2. Log in with `POST /login`.
-3. Copy the `access_token` from the response.
-4. Click **Authorize** in Swagger UI and enter:
+FastAPI also provides interactive API documentation through:
 
 ```text
-Bearer <access_token>
+/docs
 ```
 
-Tokens are currently configured to expire after 30 minutes.
+and:
 
-## Example Requests
-
-### Create an Admin
-
-```http
-POST /signup
-{
-  "name": "Admin User",
-  "email": "admin@gym.com",
-  "password": "strong-password"
-}
+```text
+/redoc
 ```
 
-### Create a Member
+---
 
-```http
-POST /members
-{
-  "name": "Alex Carter",
-  "email": "alex@example.com",
-  "phone": "555-0101",
-  "gender": "Male",
-  "dob": "1998-04-18",
-  "address": "21 Fitness Street",
-  "is_active": true
-}
+# Extending the Project
+
+When adding a new feature, follow the same development flow:
+
+```text
+Database Model
+      ↓
+Pydantic Schema
+      ↓
+Controller / Business Logic
+      ↓
+FastAPI Route
+      ↓
+Register Router
+      ↓
+Test through Swagger
+      ↓
+Connect Frontend
 ```
 
-### Create a Membership Plan
+Keeping new functionality within this structure helps the application remain modular as it grows.
 
-```http
-POST /plan
-{
-  "name": "Monthly",
-  "duration": "30",
-  "price": 49.99,
-  "decription": "Access to gym facilities for 30 days",
-  "is_active": true
-}
-```
+---
 
-### Assign a Membership
+# Production Improvements
 
-```http
-POST /memberships
-{
-  "member_id": 1,
-  "plan_id": 1,
-  "trainer_id": null,
-  "start_date": "2026-09-23"
-}
-```
+For a production deployment, consider adding:
 
-### Check In a Member
+- Alembic database migrations
+- Automated API tests
+- Role-based access control
+- Refresh tokens
+- Rate limiting
+- Logging and monitoring
+- Payment integration
+- Email notifications
+- Docker support
+- CI/CD pipelines
 
-```http
-POST /attendance/check-in
-{
-  "member_id": 1
-}
-```
-
-## Current State
-
-This repository currently contains the backend API only. The core gym workflows are implemented and split into routes, controllers, schemas, and SQLAlchemy models.
-
-Implemented:
-
-- Admin authentication
-- Members
-- Trainers
-- Membership plans
-- Membership subscriptions
-- Attendance tracking
-
-Present in the model layer but not yet exposed through routes:
-
-- Gym class scheduling
-
-Recommended next improvements:
-
-- Add `pwdlib` to `backend/requirements.txt`
-- Add tests for auth, membership renewal, attendance check-in/check-out, and validation errors
-- Add database migrations with Alembic for production-safe schema changes
-- Add a frontend dashboard for admins
-- Standardize a few field names before a public API release, such as `decription` to `description`
-
-## Database Notes
-
-Tables are created automatically during FastAPI startup through:
-
-```python
-await conn.run_sync(Base.metadata.create_all)
-```
-
-This is convenient for local development. For production, use a migration tool such as Alembic.
+---
 
 ## License
 
-This project is currently not licensed. Add a license before publishing it for public reuse.
+This project is currently unlicensed. Add a license if you intend to allow public reuse or contributions.
